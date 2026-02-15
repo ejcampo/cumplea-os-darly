@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Stiven</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#2b1436;
+      --card: rgba(255,255,255,.08);
+      --text:#fff;
+      --muted: rgba(255,255,255,.78);
+      --accent:#ff7aa2;
+      --accent2:#ffd2a8;
+      --accent3:#7ee6d7;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+
+    *{box-sizing:border-box}
+    html, body{height:100%}
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      text-align: center;
+      overflow-x: hidden;
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(255,122,162,.25), transparent 55%),
+        radial-gradient(900px 700px at 85% 30%, rgba(255,210,168,.18), transparent 55%),
+        radial-gradient(900px 700px at 60% 90%, rgba(126,230,215,.14), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+    }
+
+    /* Corazoncitos */
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .heart {
+      position: absolute;
+      bottom: -60px;
+      width: 18px;
+      height: 18px;
+      transform: rotate(45deg);
+      opacity: .35;
+      animation: floatUp linear infinite;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.75), transparent 40%),
+                  linear-gradient(135deg, rgba(255,122,162,.9), rgba(255,210,168,.85));
+      border-radius: 4px;
+    }
+    .heart::before, .heart::after{
+      content:"";
+      position:absolute;
+      width:18px;height:18px;
+      border-radius:50%;
+      background: inherit;
+      top:-9px; left:0;
+    }
+    .heart::after{ left:-9px; top:0; }
+    @keyframes floatUp{
+      from { transform: translateY(0) rotate(45deg); }
+      to { transform: translateY(-120vh) rotate(45deg); }
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 44px 18px; /* móvil */
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Fade-in al entrar */
+    .reveal{
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity .8s ease, transform .8s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card{
+      width: min(880px, 94vw);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 28px 18px; /* móvil */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    h1{
+      font-family:'Playfair Display', serif;
+      font-size: clamp(2.2rem, 7vw, 3.2rem);
+      margin: 0 0 12px;
+      letter-spacing: .4px;
+    }
+
+    .subtitle{
+      max-width: 680px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 4.2vw, 1.22rem);
+      line-height: 1.7;
+    }
+
+    .hint{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      margin: 18px 0 6px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.9);
+      font-size: .95rem;
+    }
+    .pulse-dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(255,122,162,.55);
+      animation: pulse 1.4s infinite;
+    }
+    @keyframes pulse{
+      0%{ box-shadow: 0 0 0 0 rgba(255,122,162,.55); }
+      70%{ box-shadow: 0 0 0 14px rgba(255,122,162,0); }
+      100%{ box-shadow: 0 0 0 0 rgba(255,122,162,0); }
+    }
+
+    .buttons{
+      display:flex;
+      gap:12px;
+      flex-wrap: wrap;
+      justify-content:center;
+      margin-top: 18px;
+    }
+
+    button{
+      border: none;
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing:.2px;
+      transition: transform .18s ease, filter .18s ease;
+      border-radius: 999px;
+      padding: 14px 18px; /* móvil */
+      font-size: 1.02rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: min(360px, 86vw); /* botones grandes en móvil */
+    }
+
+    .btn-music{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #1b0f1e;
+      box-shadow: 0 16px 40px rgba(255,122,162,.18);
+      position: relative;
+      overflow:hidden;
+    }
+    .btn-music::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle, rgba(255,255,255,.6), transparent 55%);
+      transform: translateX(-40%);
+      animation: shine 2.6s infinite;
+      opacity:.55;
+    }
+    @keyframes shine{
+      0%{ transform: translateX(-60%); }
+      100%{ transform: translateX(60%); }
+    }
+
+    .btn-enter{
+      background: rgba(255,255,255,.10);
+      color: white;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    button:hover{ transform: translateY(-2px); filter: brightness(1.03); }
+    button:active{ transform: translateY(0px) scale(.99); }
+
+    .tiny{
+      margin-top: 10px;
+      font-size: .95rem;
+      color: rgba(255,255,255,.70);
+    }
+
+    img{
+      width: min(380px, 86vw);
+      border-radius: 18px;
+      margin: 18px 0 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      object-fit: cover;
+    }
+
+    .line{
+      height:1px;
+      width:min(520px, 86vw);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      margin: 16px auto 0;
+    }
+
+    .counterBox{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+      padding: 18px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 18px 46px rgba(0,0,0,.35);
+    }
+
+    #contadorDias{
+      font-family:'Playfair Display', serif;
+      font-size: clamp(2.4rem, 9vw, 3.2rem);
+      letter-spacing: .4px;
+    }
+    .counterDetail{
+      display:flex;
+      justify-content:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: rgba(255,255,255,.80);
+      font-size: 1rem;
+    }
+    .pill{
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      min-width: 92px;
+    }
+    .pill b{ color: rgba(255,255,255,.95); }
+
+    .final{
+      font-family:'Playfair Display', serif;
+      font-size: clamp(1.8rem, 6.5vw, 2.8rem);
+      margin-top: 10px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.15;
+    }
+
+    .arrow{
+      margin-top: 10px;
+      font-size: 1.4rem;
+      opacity: .75;
+      animation: bob 1.2s infinite ease-in-out;
+    }
+    @keyframes bob{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(6px); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Intro -->
+  <section>
+    <div class="card reveal">
+      <h1>Stiven</h1>
+      <p class="subtitle">
+        Para el hombre que llegó sin avisar…<br>
+        y se quedó cambiándolo todo.
+      </p>
+
+      <div class="hint">
+        <span class="pulse-dot"></span>
+        <span><b>Primero</b> pon la música (y sube un poquito el volumen) 🎧</span>
+      </div>
+
+      <div class="buttons">
+        <button class="btn-music" id="btnMusic" type="button" aria-label="Reproducir música">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M8 5v14l11-7z"></path>
+          </svg>
+          Reproducir música
+        </button>
+
+        <button class="btn-enter" id="btnEnter" type="button" aria-label="Entrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M10 17l5-5-5-5v10z"></path>
+            <path d="M4 4h9a2 2 0 012 2v3h-2V6H4v12h9v-3h2v3a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"></path>
+          </svg>
+          Entrar
+        </button>
+      </div>
+
+      <div class="arrow">↓</div>
+      <p class="tiny" id="musicStatus">
+        Feliz san valentin amor de tu ingeniera favorita
+      </p>
+
+      <audio id="music">
+        <source src="cancion.mp3" type="audio/mpeg">
+      </audio>
+
+      <div class="line"></div>
+      <p class="tiny" style="margin-bottom:0; opacity:.85;">Hecho con amor por tu Sofi 🤎</p>
+    </div>
+  </section>
+
+  <!-- Secciones -->
+  <section id="inicio">
+    <div class="card reveal">
+      <img src="foto1.jpeg" alt="Foto 1">
+      <p class="subtitle">El dia que te elegi no imagine nunca que serias el amor mas real de mi vida, 
+        todo inicio con una atraccion inevitable, sin saber que esa conexion se convertiria en mi felicidad
+        te elegi sin dudas, y te eligo ahora Asi que esto es para ti: para mi luz en la oscuridad .</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card reveal">
+      <img src="foto2.jpeg" alt="Foto 2">
+      <p class="subtitle">Admiro todo de ti, tu forma de pensar y tu manera de cuidarme incluso cuando es dificil entenderme, 
+        gracias por tu paciencia inmensa mi cielo por eso te amo.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card reveal">
+      <img src="foto3.jpeg" alt="Foto 3">
+      <p class="subtitle">No todo ha sido perfecto. Pero todo contigo ha valido la pena.</p>
+    </div>
+  </section>
+
+    <section>
+    <div class="card reveal">
+      <p class="subtitle">Es un dia especial, ¿sabes porque?</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card reveal">
+      <img src="foto4.jpeg" alt="Foto 4">
+      <p class="subtitle">Han pasado</p>
+
+      <div class="counterBox">
+        <div id="contadorDias">0</div>
+        <div style="color:rgba(255,255,255,.78); font-size:1rem;">
+          días eligiéndote
+        </div>
+
+        <div class="counterDetail">
+          <div class="pill"><b id="años">0</b> años</div>
+          <div class="pill"><b id="meses">0</b> meses</div>
+          <div class="pill"><b id="dias">0</b> días</div>
+        </div>
+
+        <div class="tiny" style="margin: 0; opacity:.85;">
+          (desde <span id="fechaBonita"></span>)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="card reveal">
+      <p class="subtitle">Y si algún día me preguntas cuánto te amo…</p>
+      <div class="final">Te amo cada dia mas desde el dia que elegi amarte, gracias por cada segundo a tu lado mi niño.🤎</div>
+    </div>
+  </section>
+
+  <script>
+    // ---- Música (guía: primero música) ----
+    const music = document.getElementById("music");
+    const btnMusic = document.getElementById("btnMusic");
+    const btnEnter = document.getElementById("btnEnter");
+    const musicStatus = document.getElementById("musicStatus");
+
+    let isPlaying = false;
+
+    function playMusic(){
+      music.volume = 0.85;
+      const p = music.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => {
+          isPlaying = true;
+          btnMusic.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M6 5h4v14H6zM14 5h4v14h-4z"></path>
+            </svg>
+            Pausar música`;
+          musicStatus.innerHTML = "Perfecto 🤎 ahora sí… dale a <b>Entrar</b>.";
+        }).catch(() => {
+          musicStatus.innerHTML = "El navegador no dejó reproducir 😅. Toca <b>Reproducir música</b> otra vez.";
+        });
+      }
+    }
+
+    btnMusic.addEventListener("click", () => {
+      if(!isPlaying){
+        playMusic();
+      } else {
+        music.pause();
+        isPlaying = false;
+        btnMusic.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M8 5v14l11-7z"></path>
+          </svg>
+          Reproducir música`;
+        musicStatus.innerHTML = "Ok 🤎 cuando quieras, vuelve a ponerla y seguimos.";
+      }
+    });
+
+    btnEnter.addEventListener("click", () => {
+      document.getElementById('inicio').scrollIntoView({behavior:'smooth'});
+    });
+
+    // ---- Contador romántico (años, meses, días) + total días ----
+    const fechaInicio = new Date("2022-08-03T00:00:00");
+
+    function diffYMD(from, to){
+      // normaliza horas para evitar problemas por DST
+      const f = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+      const t = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+
+      let years = t.getFullYear() - f.getFullYear();
+      let months = t.getMonth() - f.getMonth();
+      let days = t.getDate() - f.getDate();
+
+      if (days < 0) {
+        // toma días del mes anterior
+        const prevMonth = new Date(t.getFullYear(), t.getMonth(), 0).getDate();
+        days += prevMonth;
+        months -= 1;
+      }
+      if (months < 0) {
+        months += 12;
+        years -= 1;
+      }
+      return { years, months, days };
+    }
+
+    const hoy = new Date();
+
+    // total días
+    const diferenciaMs = (new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate())) -
+                         (new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate()));
+    const totalDias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+    document.getElementById("contadorDias").innerText = totalDias;
+
+    // desglose años/meses/días
+    const { years, months, days } = diffYMD(fechaInicio, hoy);
+    document.getElementById("años").innerText = years;
+    document.getElementById("meses").innerText = months;
+    document.getElementById("dias").innerText = days;
+
+    // fecha bonita
+    document.getElementById("fechaBonita").innerText =
+      fechaInicio.toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'numeric' });
+
+    // ---- Fade-in al hacer scroll ----
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add("show");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.18 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    // ---- Corazoncitos flotando ----
+    const hearts = document.getElementById("hearts");
+    const total = 18;
+    for(let i=0;i<total;i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      const left = Math.random() * 100;
+      const size = 10 + Math.random() * 16;
+      const dur = 7 + Math.random() * 8;
+      const delay = Math.random() * 6;
+
+      h.style.left = left + "vw";
+      h.style.width = size + "px";
+      h.style.height = size + "px";
+      h.style.animationDuration = dur + "s";
+      h.style.animationDelay = delay + "s";
+      h.style.opacity = (0.20 + Math.random() * 0.25).toFixed(2);
+
+      hearts.appendChild(h);
+    }
+  </script>
+
+</body>
+</html>
